@@ -1,4 +1,4 @@
-import { Client, ClientUser, Message, MessageEmbed } from "discord.js";
+import { Client, Intents, Message, MessageEmbed } from "discord.js";
 import Pixiv from "./pixiv";
 import commands from "./help";
 import { keepAlive } from "./server";
@@ -6,26 +6,27 @@ import globalConfig from "./config";
 import { SearchIllustsResponse } from "./types/response";
 
 const EMBED_ILLUST_BASE_URL = "https://embed.pixiv.net/decorate.php?illust_id=";
-const PROXY_IMAGE_URL = "https://pixivBot.purindaisuki.repl.co/image/";
 
 const bot = new Client({
-  fetchAllMembers: true,
   presence: {
     status: "online",
-    activity: {
-      name: `${globalConfig.commandPrefix}help`,
-      type: "LISTENING",
-    },
+    activities: [
+      {
+        name: `${globalConfig.commandPrefix}help`,
+        type: "LISTENING",
+      },
+    ],
   },
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 const pixiv = new Pixiv();
 
 const getProxiedImageUrl = (url: string) =>
-  process.env.NODE_ENV === "development"
+  process.env.NODE_ENV === "development" || !process.env.PROXY
     ? url.includes("img-original")
       ? EMBED_ILLUST_BASE_URL + url.split("/").slice(-1)[0].slice(0, 8)
       : null
-    : PROXY_IMAGE_URL + url.replace("https://", "");
+    : `${process.env.PROXY}/image/${url.replace("https://", "")}`;
 
 export type IllustData = {
   id: number;
@@ -118,7 +119,7 @@ const searchIllust = async (
         return false;
       }
 
-      message.channel.send(illustEmbed(illust));
+      message.channel.send({ embeds: [illustEmbed(illust)] });
     });
   } catch (err) {
     console.log(err);
@@ -126,9 +127,7 @@ const searchIllust = async (
   }
 };
 
-bot.on("ready", () =>
-  console.log(`Logged in as ${(bot.user as ClientUser).tag}.`)
-);
+bot.on("ready", () => console.log("Bot is ready"));
 
 bot.on("message", async (message) => {
   // Check for command
@@ -220,7 +219,7 @@ bot.on("message", async (message) => {
               );
           }
         }
-        message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
         break;
     }
   }
