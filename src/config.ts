@@ -1,9 +1,7 @@
 export default {
-  commandPrefix: "$",
-  optionPrefix: "-",
-  maxResultNum: 10,
+  prefix: "$",
   botToken: process.env.BOT_TOKEN,
+  clientId: process.env.CLIENT_ID,
   guildId: process.env.GUILD_ID,
   pixivRefreshToken: process.env.PIXIV_REFRESH_TOKEN,
-  pixivAccessToken: process.env.PIXIV_ACCESS_TOKEN,
 };

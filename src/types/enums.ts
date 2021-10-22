@@ -19,7 +19,18 @@ export enum RankingMode {
   DAY_FEMALE = "day_female",
   WEEK_ORIGINAL = "week_original",
   WEEK_ROOKIE = "week_rookie",
+  DAY_R18 = "day_r18",
+  DAY_MALE_R18 = "day_male_r18",
+  DAY_FEMALE_R18 = "day_female_r18",
+  WEEK_R18 = "week_r18",
+  WEERK_R18G = "week_r18g",
   DAY_MANGA = "day_manga",
+  WEEK_MANGA = "week_manga",
+  MONTH_MANGA = "month_manga",
+  WEEK_ROOKIE_MANGA = "week_rookie_manga",
+  DAY_R18_MANGA = "day_r18_manga",
+  WEEK_R18_MANGA = "week_r18_manga",
+  WEEK_R18G_MANGA = "week_r18g_manga",
 }
 
 export enum SearchTarget {
@@ -38,6 +49,7 @@ export enum Size {
 export enum Sort {
   DATE_DESC = "date_desc",
   DATE_ASC = "date_asc",
+  POPULAR_DESC = "popular_desc",
 }
 
 export enum Visibility {

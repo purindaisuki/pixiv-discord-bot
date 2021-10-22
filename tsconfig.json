@@ -11,5 +11,5 @@
       "*": ["node_modules/*", "src/types/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "deploy-commands.ts"]
 }

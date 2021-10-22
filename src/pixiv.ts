@@ -16,18 +16,12 @@ import {
   Visibility,
 } from "./types/enums";
 import { Auth } from "./types/auth";
-import globalConfig from "./config";
 
 const BASE_URL = "https://app-api.pixiv.net";
 const AUTH_TOKEN_URL = "https://oauth.secure.pixiv.net/auth/token";
 const CLIENT_ID = "MOBrBDS8blbauoSck0ZfDbtuzpyT";
 const CLIENT_SECRET = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj";
 
-/**take config argument
- * implement related illustrations method
- * readme
- * direst image url
- */
 const validateIllustId = (id: number) => id.toString().length === 8;
 const queryStringify = (obj: {
   [key: string]: boolean | number | string | undefined;
@@ -59,12 +53,12 @@ const defaultHeaders = {
 export default class PixivAPI {
   headers: AxiosRequestConfig["headers"];
   auth?: Auth;
-  useImageProxy?: boolean;
+  refreshToken: string;
 
-  constructor(options?: { headers?: AxiosRequestConfig["headers"] }) {
-    this.headers = options?.headers
-      ? { ...defaultHeaders, ...options.headers }
-      : defaultHeaders;
+  constructor(refreshToken: string) {
+    this.headers = defaultHeaders;
+    this.refreshToken = refreshToken;
+    this.refreshAccessToken();
   }
 
   /**
@@ -76,7 +70,7 @@ export default class PixivAPI {
       client_secret: CLIENT_SECRET,
       include_policy: "true",
       grant_type: "refresh_token",
-      refresh_token: globalConfig.pixivRefreshToken as string,
+      refresh_token: this.refreshToken,
     });
 
     const config = {
@@ -116,14 +110,12 @@ export default class PixivAPI {
     }
 
     const queryString = params ? queryStringify(params) : "";
-    const requsetUrl = BASE_URL + url + queryString;
+    const requsetURL = BASE_URL + url + queryString;
 
     const defaultConfig = {
       headers: {
         ...this.headers,
-        Authorization: `Bearer ${
-          this.auth?.access_token ?? globalConfig.pixivAccessToken
-        }`,
+        Authorization: `Bearer ${this.auth?.access_token}`,
       },
     };
     const requestConfig = config
@@ -131,7 +123,7 @@ export default class PixivAPI {
       : defaultConfig;
 
     try {
-      const res = await axios(requsetUrl, requestConfig);
+      const res = await axios(requsetURL, requestConfig);
 
       return res.data;
     } catch (err) {
@@ -150,7 +142,7 @@ export default class PixivAPI {
         };
 
         try {
-          const retryRes = await axios(requsetUrl, newConfig);
+          const retryRes = await axios(requsetURL, newConfig);
 
           return retryRes.data;
         } catch (retryErr) {
@@ -170,15 +162,19 @@ export default class PixivAPI {
    * @param word
    * @returns
    */
-  searchLatestIllusts(word: string) {
+  searchIllusts(
+    word: string,
+    sort: Sort = Sort.DATE_DESC,
+    search_target: SearchTarget = SearchTarget.TAGS_PARTIAL
+  ) {
     if (!word) {
       return Promise.reject(new Error("invalid word"));
     }
 
     return this.requestData("/v1/search/illust?", {
       word: encodeURIComponent(word),
-      search_target: SearchTarget.TAGS_PARTIAL,
-      sort: Sort.DATE_DESC,
+      search_target,
+      sort,
     }) as Promise<SearchIllustsResponse>;
   }
 
@@ -187,14 +183,17 @@ export default class PixivAPI {
    * @param word
    * @returns
    */
-  searchPopularIllustsPreview(word: string) {
+  searchPopularIllustsPreview(
+    word: string,
+    search_target: SearchTarget = SearchTarget.TAGS_PARTIAL
+  ) {
     if (!word) {
       return Promise.reject(new Error("invalid word"));
     }
 
     return this.requestData("/v1/search/popular-preview/illust?", {
       word: encodeURIComponent(word),
-      search_target: SearchTarget.TAGS_PARTIAL,
+      search_target,
     }) as Promise<SearchIllustsResponse>;
   }
 

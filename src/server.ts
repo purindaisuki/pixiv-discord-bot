@@ -30,8 +30,8 @@ app.get("/image/*", (req, res) => {
     });
 });
 
-export const keepAlive = () => {
+export const listen = () => {
   app.listen(process.env.PORT, () => {
-    console.log("Server is ready.");
+    console.log("Server is ready");
   });
 };
