@@ -1,5 +1,5 @@
-import { Auth } from "auth";
-import { ContentType, Visibility } from "enums";
+import type { Auth } from "./auth";
+import type { ContentType, Visibility } from "./enums";
 
 export type AuthTokenResponse = Auth & {
   response: Auth;
@@ -54,6 +54,20 @@ type Illust = {
   is_bookmarked: boolean;
   visible: boolean;
   is_muted: boolean;
+};
+
+export type ParsedIllustData = {
+  id: number;
+  caption: string;
+  title: string;
+  user: {
+    id: number;
+    name: string;
+    account: string;
+    image: string | null;
+    is_followed: boolean;
+  };
+  image: string;
 };
 
 export type SearchIllustsResponse = {

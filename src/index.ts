@@ -1,8 +1,8 @@
 import { Client, Collection, Intents, MessageEmbed } from "discord.js";
+import { makeTuple } from "./types/helpers";
 import PixivAPI from "./pixiv";
 import { listen } from "./server";
 import * as commandModules from "./commands";
-import { makeTuple } from "./helpers";
 import config from "./config";
 
 const pixiv = new PixivAPI(config.pixivRefreshToken!);
@@ -21,7 +21,7 @@ const bot = new Client({
 
 const commandsCollection = new Collection(
   Object.values(commandModules).map((command) =>
-    makeTuple(command.data.name, command)
+    makeTuple([command.data.name, command])
   )
 );
 

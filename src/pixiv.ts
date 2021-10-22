@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
-import {
+import type {
   IullstBookmarkDetailResponse,
   IllustDetailResponse,
   IllustsResponse,
@@ -8,6 +8,7 @@ import {
   TrendingIllustTagsResponse,
   AuthTokenResponse,
 } from "./types/response";
+import type { Auth } from "./types/auth";
 import {
   ContentType,
   RankingMode,
@@ -15,7 +16,6 @@ import {
   Sort,
   Visibility,
 } from "./types/enums";
-import { Auth } from "./types/auth";
 
 const BASE_URL = "https://app-api.pixiv.net";
 const AUTH_TOKEN_URL = "https://oauth.secure.pixiv.net/auth/token";
@@ -159,6 +159,7 @@ export default class PixivAPI {
 
   /**
    * return first 30 latest search results
+   * popularity search works for premium accounts
    * @param word
    * @returns
    */
