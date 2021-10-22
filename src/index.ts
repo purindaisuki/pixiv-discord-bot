@@ -28,7 +28,7 @@ const commandsCollection = new Collection(
 bot.on("ready", () => {
   console.log("Bot is ready");
 
-  const guild = bot.guilds.cache.get(config.guildId as string);
+  const guild = bot.guilds.cache.get(config.guildId!);
   const commands = guild?.commands;
 
   commandsCollection.forEach((command) => {
