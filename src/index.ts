@@ -1,5 +1,4 @@
 import { Client, Collection, Intents, MessageEmbed } from "discord.js";
-import { makeTuple } from "./types/helpers";
 import PixivAPI from "./pixiv";
 import { listen } from "./server";
 import * as commandModules from "./commands";
@@ -18,6 +17,11 @@ const bot = new Client({
   },
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
+
+const makeTuple = <A extends any, B extends any>([a, b]: [A, B]): [A, B] => [
+  a,
+  b,
+];
 
 const commandsCollection = new Collection(
   Object.values(commandModules).map((command) =>

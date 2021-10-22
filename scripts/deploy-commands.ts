@@ -1,14 +1,10 @@
-import { Collection } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
-import { makeTuple } from "../src/types/helpers";
 import * as commandModules from "../src/commands";
 import config from "../src/config";
 
-const commands = new Collection(
-  Object.values(commandModules).map((command) =>
-    makeTuple([command.data.name, command])
-  )
+const commands = Object.values(commandModules).map((command) =>
+  command.data.toJSON()
 );
 const rest = new REST({ version: "9" }).setToken(config.botToken!);
 
