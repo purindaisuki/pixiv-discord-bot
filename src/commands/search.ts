@@ -13,7 +13,7 @@ import {
 } from "./utils";
 
 enum SEARCH_FLAG {
-  POPULARITY = "popularity",
+  POPULAR = "popular",
   LATEST = "latest",
 }
 
@@ -35,7 +35,7 @@ const searchIllusts = async (
           )
         );
         break;
-      case SEARCH_FLAG.POPULARITY:
+      case SEARCH_FLAG.POPULAR:
         illusts = parseIllustsResponse(
           (await pixiv.searchPopularIllustsPreview(query)).illusts.slice(
             0,
@@ -60,7 +60,7 @@ export const search = {
     .setDescription("Search illustrations by a word")
     .addSubcommand((subCommand) =>
       subCommand
-        .setName(SEARCH_FLAG.POPULARITY)
+        .setName(SEARCH_FLAG.POPULAR)
         .setDescription("Search the most popular illustrations")
         .addStringOption(query)
         .addIntegerOption(number)
