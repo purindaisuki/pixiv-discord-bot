@@ -1,15 +1,14 @@
 {
-  "name": "pixiv-bot",
+  "name": "pixiv-discord-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Discord bot to fetch illustrations from Pixiv.",
   "scripts": {
     "deploy-discord-commands": "node -r dotenv/config -r ts-node/register scripts/deploy-commands.ts",
     "replit-start": "npm run deploy-discord-commands && ts-node src/index.ts",
     "start": "node -r dotenv/config -r ts-node/register src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "author": "purindaisuki (https://github.com/purindaisuki)",
   "license": "MIT",
   "dependencies": {
     "@discordjs/builders": "^0.7.0",
