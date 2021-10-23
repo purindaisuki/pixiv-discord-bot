@@ -8,12 +8,12 @@ import {
   parseIllustsResponse,
 } from "./utils";
 
-const fetchLatestIllusts = async (pixiv: PixivAPI, number: number) => {
+const fetchFollowedIllusts = async (pixiv: PixivAPI, number: number) => {
   let illusts;
 
   try {
     illusts = parseIllustsResponse(
-      (await pixiv.fetchLatestIllusts()).illusts.slice(0, number)
+      (await pixiv.fetchFollowedIllusts()).illusts.slice(0, number)
     );
   } catch (err) {
     console.log(err);
@@ -22,17 +22,17 @@ const fetchLatestIllusts = async (pixiv: PixivAPI, number: number) => {
   return illusts ?? null;
 };
 
-export const latest = {
+export const followed = {
   data: new SlashCommandBuilder()
-    .setName("new")
-    .setDescription("Return new illustrations")
+    .setName("followed")
+    .setDescription("Return followed illustrations")
     .addIntegerOption(number),
   async execute(pixiv: PixivAPI, interaction: CommandInteraction) {
     const number = Math.min(
       interaction.options.getInteger("number") ?? 1,
       DISCORD_EMBED_MAXIMUM
     );
-    const illusts = await fetchLatestIllusts(pixiv, number);
+    const illusts = await fetchFollowedIllusts(pixiv, number);
 
     await handleIllustReply(interaction, illusts);
   },

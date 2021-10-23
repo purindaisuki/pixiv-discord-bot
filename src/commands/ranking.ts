@@ -24,8 +24,10 @@ const fetchRankingIllusts = async (
   number: number
 ) => {
   let illusts;
+
   try {
     let mode;
+
     if (r18) {
       switch (flag) {
         case RankingMode.DAY:
