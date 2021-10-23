@@ -44,10 +44,12 @@ type Illust = {
     original_image_url: string;
   };
   meta_pages: {
-    square_medium: string;
-    medium: string;
-    large: string;
-    original: string;
+    image_urls: {
+      square_medium: string;
+      medium: string;
+      large: string;
+      original: string;
+    };
   }[];
   total_view: number;
   total_bookmarks: number;

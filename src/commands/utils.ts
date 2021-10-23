@@ -26,9 +26,11 @@ export const parseIllustsResponse = (
       ...i.user,
       image: getProxiedImageURL(i.user.profile_image_urls.medium),
     },
-    image: getProxiedImageURL(i.image_urls.large)!,
+    image: getProxiedImageURL(
+      i.meta_single_page.original_image_url ??
+        i.meta_pages[0].image_urls.original
+    )!,
   }));
-
 const illustEmbed = (illust: ParsedIllustData) => {
   const embed = new MessageEmbed()
     .setColor("#0097FA")
