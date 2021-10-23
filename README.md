@@ -2,11 +2,11 @@
 
 Pixiv-Discord-Bot allows you to get illustrations from [Pixiv](https://www.pixiv.net/) on Discord servers.
 
-![Result](images/result.png)
+![Result](images/result.jpg)
 
 ## Requirement
 
-- Node.js > 16.6.0
+- Node.js >= 16.6.0
 - A self-hosted server
 - A Discord developer account
 - A Pixiv account
@@ -37,7 +37,7 @@ In the `config.ts` file, you can edit the bot's command prefix.
 
 Pixiv-Discord-Bot uses text commands and [slash commands](https://support.discord.com/hc/en-us/articles/1500000368501-Slash-Commands-FAQ) to interact with users. For text commands, bot works after users press `enter`. As for slash commands, when users type `/` in message bar on Discord, the commands show automatically.
 
-![Slash commands](images/slash_command.png)
+![Slash commands](images/slash_command.jpg)
 
 Commands are shown below:
 
@@ -55,6 +55,11 @@ Commands are shown below:
 - **/new \[`number`\]** - Return first `number` latest illustrations
 - **/recommend \[`number`\]** - Return first `number` recommended illustrations
 - **/followed \[`number`\]** - Return first `number` followed illustrations
+
+### Hosting
+
+`.replit` and `replit.nix` are config files for hosting on Repl.it. [![Run on Repl.it](https://replit.com/badge/github/@purindaisuki/pixiv-discord-bot)](https://replit.com/@purindaisuki/pixiv-discord-bot)
+You can use other services to host your bot.
 
 ## License
 
