@@ -1,5 +1,6 @@
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { SlashCommandIntegerOption } from "@discordjs/builders";
+import he from "he";
 import type {
   ParsedIllustData,
   SearchIllustsResponse,
@@ -15,12 +16,18 @@ const getProxiedImageURL = (url: string) =>
       : EMBED_ILLUST_BASE_URL + url.split("/").slice(-1)[0].slice(0, 8)
     : `${process.env.PROXY}/image/${url.replace("https://", "")}`;
 
+const parseDescriptionHtml = (string: string) =>
+  he
+    .decode(string)
+    .replaceAll(/<a[^>]*href="([^"]+)"[^>]*>(?:.*?<\/a>)?/g, "[$1]($1)")
+    .replaceAll("<br />", "\n");
+
 export const parseIllustsResponse = (
   illusts: SearchIllustsResponse["illusts"]
 ): ParsedIllustData[] =>
   illusts.map((i) => ({
     id: i.id,
-    caption: i.caption,
+    caption: parseDescriptionHtml(i.caption),
     title: i.title,
     user: {
       ...i.user,
