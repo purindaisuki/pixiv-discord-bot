@@ -8,6 +8,11 @@ const webHeaders = {
   Referer: "https://www.pixiv.net",
 };
 
+// route for uptimerobot
+app.get("/", (_, res) => {
+  res.send("Server is up.");
+});
+
 // proxy image
 app.get("/image/*", (req, res) => {
   const { path } = req;
