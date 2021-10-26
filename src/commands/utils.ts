@@ -20,6 +20,7 @@ const parseDescriptionHtml = (string: string) =>
   he
     .decode(string)
     .replaceAll(/<a[^>]*href="([^"]+)"[^>]*>(?:.*?<\/a>)?/g, "[$1]($1)")
+    .replaceAll(/<strong>(.*?)<\/strong>/g, "**$1**")
     .replaceAll("<br />", "\n");
 
 export const parseIllustsResponse = (
