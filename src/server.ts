@@ -20,6 +20,7 @@ app.get("/image/*", (req, res) => {
 
   if (!url?.startsWith("i.pximg.net")) {
     res.sendStatus(400);
+    return;
   }
 
   axios("https://" + url, { headers: webHeaders, responseType: "arraybuffer" })
