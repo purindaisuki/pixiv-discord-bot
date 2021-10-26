@@ -8,7 +8,7 @@ const webHeaders = {
   Referer: "https://www.pixiv.net",
 };
 
-// route for uptimerobot
+// route for uptimerbot
 app.get("/", (_, res) => {
   res.send("Server is up.");
 });
