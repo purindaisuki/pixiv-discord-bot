@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 import type {
-  IullstBookmarkDetailResponse,
+  IllustBookmarkDetailResponse,
   IllustDetailResponse,
   IllustsResponse,
   SearchIllustsResponse,
@@ -35,10 +35,10 @@ const queryStringify = (obj: {
   );
 const throwRequestError = (err: AxiosError) => {
   if (err.response) {
-    throw err.response.data;
-  } else {
-    throw err.message;
+    console.log(err.response.data);
   }
+
+  throw new Error(err.message);
 };
 
 const defaultHeaders = {
@@ -58,7 +58,6 @@ export default class PixivAPI {
   constructor(refreshToken: string) {
     this.headers = defaultHeaders;
     this.refreshToken = refreshToken;
-    this.refreshAccessToken();
   }
 
   /**
@@ -163,7 +162,7 @@ export default class PixivAPI {
    * @param word
    * @returns
    */
-  searchIllusts(
+  searchLatestIllusts(
     word: string,
     sort: Sort = Sort.DATE_DESC,
     search_target: SearchTarget = SearchTarget.TAGS_PARTIAL
@@ -225,7 +224,7 @@ export default class PixivAPI {
 
     return this.requestData("/v2/illust/bookmark/detail?", {
       illust_id: id,
-    }) as Promise<IullstBookmarkDetailResponse>;
+    }) as Promise<IllustBookmarkDetailResponse>;
   }
 
   /**

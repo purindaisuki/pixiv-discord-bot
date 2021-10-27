@@ -56,6 +56,7 @@ type Illust = {
   is_bookmarked: boolean;
   visible: boolean;
   is_muted: boolean;
+  total_comments?: number;
 };
 
 export type ParsedIllustData = {
@@ -74,10 +75,11 @@ export type ParsedIllustData = {
 
 export type SearchIllustsResponse = {
   illusts: Illust[];
+  next_url?: string;
   search_span_limit: number;
 };
 
-export type IullstBookmarkDetailResponse = {
+export type IllustBookmarkDetailResponse = {
   bookmark_detail: {
     is_bookmarked: boolean;
     tags: {

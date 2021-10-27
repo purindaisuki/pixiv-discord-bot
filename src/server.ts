@@ -1,5 +1,6 @@
 import express from "express";
 import axios, { AxiosError } from "axios";
+import config from "./config";
 
 const app = express();
 const webHeaders = {
@@ -36,8 +37,10 @@ app.get("/image/*", (req, res) => {
     });
 });
 
+export default app;
+
 export const listen = () => {
-  app.listen(process.env.PORT, () => {
+  app.listen(config.port ?? "3000", () => {
     console.log("Server is ready");
   });
 };
