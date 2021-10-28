@@ -5,16 +5,17 @@ import type {
   ParsedIllustData,
   SearchIllustsResponse,
 } from "../types/response";
+import config from "../config";
 
 export const DISCORD_EMBED_MAXIMUM = 10; // data.embeds: Must be 10 or fewer in length.
 const EMBED_ILLUST_BASE_URL = "https://embed.pixiv.net/decorate.php?illust_id=";
 
 const getProxiedImageURL = (url: string) =>
-  process.env.NODE_ENV === "development" || !process.env.PROXY
+  config.nodeEnv === "development" || !config.proxy
     ? url.includes("user")
       ? null
       : EMBED_ILLUST_BASE_URL + url.split("/").slice(-1)[0].slice(0, 8)
-    : `${process.env.PROXY}/image/${url.replace("https://", "")}`;
+    : `${config.proxy}/image/${url.replace("https://", "")}`;
 
 const parseDescriptionHtml = (string: string) =>
   he
