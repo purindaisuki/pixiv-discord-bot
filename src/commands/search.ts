@@ -12,12 +12,12 @@ import {
   parseIllustsResponse,
 } from "./utils";
 
-enum SEARCH_FLAG {
+export enum SEARCH_FLAG {
   POPULAR = "popular",
   LATEST = "latest",
 }
 
-const searchIllusts = async (
+export const searchIllusts = async (
   pixiv: PixivAPI,
   flag: SEARCH_FLAG,
   query: string,

@@ -7,6 +7,6 @@ module.exports = {
       diagnostics: false,
     },
   },
-  testPathIgnorePatterns: ["/node_modules/", "dist"],
-  setupFilesAfterEnv: ["./src/jest-extend.ts"],
+  testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/dist"],
+  setupFilesAfterEnv: ["<rootDir>/.jest/extend-expect.ts"],
 };

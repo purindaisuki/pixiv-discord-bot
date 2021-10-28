@@ -41,7 +41,7 @@ type Illust = {
     title: string;
   } | null;
   meta_single_page: {
-    original_image_url: string;
+    original_image_url?: string;
   };
   meta_pages: {
     image_urls: {

@@ -8,9 +8,10 @@ import type {
 import config from "../config";
 
 export const DISCORD_EMBED_MAXIMUM = 10; // data.embeds: Must be 10 or fewer in length.
-const EMBED_ILLUST_BASE_URL = "https://embed.pixiv.net/decorate.php?illust_id=";
+export const EMBED_ILLUST_BASE_URL =
+  "https://embed.pixiv.net/decorate.php?illust_id=";
 
-const getProxiedImageURL = (url: string) =>
+export const getProxiedImageURL = (url: string) =>
   config.nodeEnv === "development" || !config.proxy
     ? url.includes("user")
       ? null

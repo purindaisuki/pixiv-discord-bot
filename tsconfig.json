@@ -12,5 +12,5 @@
       "*": ["node_modules/*"]
     }
   },
-  "include": ["src/**/*", "deploy-commands.ts"]
+  "include": ["src/**/*", "deploy-commands.ts", "extend-expect.ts"]
 }
