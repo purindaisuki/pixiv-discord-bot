@@ -66,9 +66,7 @@ export type ParsedIllustData = {
   user: {
     id: number;
     name: string;
-    account: string;
     image: string | null;
-    is_followed: boolean;
   };
   image: string;
 };

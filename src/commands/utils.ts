@@ -27,20 +27,26 @@ const parseDescriptionHtml = (string: string) =>
 export const parseIllustsResponse = (
   illusts: SearchIllustsResponse["illusts"]
 ): ParsedIllustData[] =>
-  illusts.map((i) => ({
-    id: i.id,
-    caption: parseDescriptionHtml(i.caption),
-    title: i.title,
-    user: {
-      ...i.user,
-      image: getProxiedImageURL(i.user.profile_image_urls.medium),
-    },
-    image: getProxiedImageURL(
-      i.meta_single_page.original_image_url ??
-        i.meta_pages[0].image_urls.original
-    )!,
-  }));
-const illustEmbed = (illust: ParsedIllustData) => {
+  illusts.map((i) => {
+    const { name: userName, id: userId } = i.user;
+
+    return {
+      id: i.id,
+      caption: parseDescriptionHtml(i.caption),
+      title: i.title,
+      user: {
+        id: userId,
+        name: userName,
+        image: getProxiedImageURL(i.user.profile_image_urls.medium),
+      },
+      image: getProxiedImageURL(
+        i.meta_single_page.original_image_url ??
+          i.meta_pages[0].image_urls.original
+      )!,
+    };
+  });
+
+export const illustEmbed = (illust: ParsedIllustData) => {
   const embed = new MessageEmbed()
     .setColor("#0097FA")
     .setTitle(illust.title)
