@@ -2,7 +2,6 @@ import { Message, MessageEmbed } from "discord.js";
 import config from "../config";
 
 export const messageHandler = async (message: Message) => {
-  // Check for command
   if (message.content.startsWith(`${config.prefix}help`)) {
     const embed = new MessageEmbed()
       .setTitle("HOW-TO")
