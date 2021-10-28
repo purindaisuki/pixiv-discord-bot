@@ -13,11 +13,11 @@ const setup = async () => {
 
 beforeAll(() => setup());
 
-test("should expose a constructor", () => {
+test("PixivAPI should expose a constructor.", () => {
   expect(PixivAPI).toBeInstanceOf(Function);
 });
 
-test("should fail to refresh token", async () => {
+test("PixivAPI should throw with 400 with an invalid refresh token.", async () => {
   const invalidToken = "123456";
 
   await expect(new PixivAPI(invalidToken).refreshAccessToken()).rejects.toThrow(
@@ -25,17 +25,17 @@ test("should fail to refresh token", async () => {
   );
 });
 
-test("should have access_token and refreshToken", () => {
-  expect(pixiv.refreshToken).not.toBe(undefined);
-  expect(pixiv.auth?.access_token).not.toBe(undefined);
+test("PixivAPI should have auth.access_token and refreshToken properties.", () => {
+  expect(pixiv).toHaveProperty("refreshToken");
+  expect(pixiv).toHaveProperty("auth.access_token");
 });
 
-describe("search latest illustrations matching the query", () => {
-  test("should reject invalid queries", async () => {
+describe("When searching latest illustrations,", () => {
+  test("PixivAPI should reject invalid queries.", async () => {
     await expect(pixiv.searchLatestIllusts("")).rejects.toThrow("invalid word");
   });
 
-  test("should return a valid response", async () => {
+  test("PixivAPI should return an valid result with the query.", async () => {
     expect.assertions(3);
 
     try {
@@ -51,18 +51,18 @@ describe("search latest illustrations matching the query", () => {
   });
 });
 
-describe("search popular illustrations matching the query", () => {
-  test("should reject invalid queries", async () => {
+describe("When searching popular illustrations,", () => {
+  test("PixivAPI should reject invalid queries.", async () => {
     await expect(pixiv.searchPopularIllustsPreview("")).rejects.toThrow(
       "invalid word"
     );
   });
 
-  test("should return a valid response", async () => {
+  test("PixivAPI should return an valid result with the query.", async () => {
     expect.assertions(3);
 
     try {
-      const res = await pixiv.searchLatestIllusts(TEST_QUERY);
+      const res = await pixiv.searchPopularIllustsPreview(TEST_QUERY);
 
       expect(res).toHaveProperty("search_span_limit");
       expect(res).toHaveProperty("illusts");
@@ -74,12 +74,12 @@ describe("search popular illustrations matching the query", () => {
   });
 });
 
-describe("fetch illustration detail by id", () => {
-  test("should reject invalid id", async () => {
+describe("When fetching the illustration detail,", () => {
+  test("PixivAPI should reject invalid id.", async () => {
     await expect(pixiv.fetchIllustDetail(123)).rejects.toThrow("invalid id");
   });
 
-  test("should return a valid response", async () => {
+  test("PixivAPI should return an valid result with the id.", async () => {
     expect.assertions(1);
 
     try {
@@ -93,14 +93,14 @@ describe("fetch illustration detail by id", () => {
   });
 });
 
-describe("fetch illustration bookmark detail by id", () => {
-  test("should reject invalid id", async () => {
+describe("When fetching the illustration bookmark detail,", () => {
+  test("PixivAPI should reject invalid id.", async () => {
     await expect(pixiv.fetchIllustBookmarkDetail(123)).rejects.toThrow(
       "invalid id"
     );
   });
 
-  test("should return a valid response", async () => {
+  test("PixivAPI should return an valid result with the id.", async () => {
     expect.assertions(5);
 
     try {
@@ -118,12 +118,12 @@ describe("fetch illustration bookmark detail by id", () => {
   });
 });
 
-describe("fetch related illustrations by id", () => {
-  test("should reject invalid id", async () => {
+describe("When fetching the related illustrations,", () => {
+  test("PixivAPI should reject invalid id.", async () => {
     await expect(pixiv.fetchRelatedIllusts(123)).rejects.toThrow("invalid id");
   });
 
-  test("should return a valid response", async () => {
+  test("PixivAPI should return an valid result with the id.", async () => {
     expect.assertions(3);
 
     try {
@@ -139,7 +139,7 @@ describe("fetch related illustrations by id", () => {
   });
 });
 
-test("should fetch latest illustrations", async () => {
+test("PixivAPI should fetch valid latest illustrations.", async () => {
   expect.assertions(3);
 
   try {
@@ -154,7 +154,7 @@ test("should fetch latest illustrations", async () => {
   }
 });
 
-test("should fetch followed illustrations", async () => {
+test("PixivAPI should fetch valid followed illustrations.", async () => {
   expect.assertions(3);
 
   try {
@@ -169,8 +169,8 @@ test("should fetch followed illustrations", async () => {
   }
 });
 
-describe("fetch recommended illustrations", () => {
-  test("should fetch recommended illustrations", async () => {
+describe("When fetching the recommended illustrations,", () => {
+  test("PixivAPI should fetch valid recommended illustrations.", async () => {
     expect.assertions(4);
 
     try {
@@ -186,7 +186,7 @@ describe("fetch recommended illustrations", () => {
     }
   });
 
-  test("should fetch recommended illustrations including ranking results", async () => {
+  test("PixivAPI should fetch valid recommended illustrations including ranking results.", async () => {
     expect.assertions(6);
 
     try {
@@ -207,11 +207,11 @@ describe("fetch recommended illustrations", () => {
   });
 });
 
-test("should fetch ranking illustrations", async () => {
+test("PixivAPI should fetch valid ranking illustrations.", async () => {
   expect.assertions(3);
 
   try {
-    const res = await pixiv.fetchRankingIllust();
+    const res = await pixiv.fetchRankingIllusts();
 
     expect(res).toHaveProperty("next_url");
     expect(res).toHaveProperty("illusts");
@@ -222,7 +222,7 @@ test("should fetch ranking illustrations", async () => {
   }
 });
 
-test("should fetch trending tags", async () => {
+test("PixivAPI should fetch valid trending tags.", async () => {
   expect.assertions(2);
 
   try {

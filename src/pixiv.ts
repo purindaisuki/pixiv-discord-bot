@@ -319,7 +319,7 @@ export default class PixivAPI {
    * @param offset
    * @returns
    */
-  fetchRankingIllust(
+  fetchRankingIllusts(
     mode: RankingMode = RankingMode.DAY,
     date?: string,
     offset?: number
