@@ -47,15 +47,23 @@ test("latest.execute(pixiv, interaction) should call pixiv and discord apis.", a
   expect(pixiv.fetchLatestIllusts).toBeCalledTimes(1);
 });
 
-describe("fetchLatestIllusts(pixiv, number) should return a array", () => {
-  test("with length 6 when the number argument is 6.", async () => {
+describe("fetchLatestIllusts(pixiv, number)", () => {
+  test("should return null when erros happened in pixiv api call.", async () => {
+    pixiv.fetchLatestIllusts.mockRejectedValueOnce("");
+
+    const illusts = await fetchLatestIllusts(pixiv, 1);
+
+    expect(illusts).toBe(null);
+  });
+
+  test("should return a array with length 6 when the number argument is 6.", async () => {
     const illusts = await fetchLatestIllusts(pixiv, 6);
 
     expect(illusts).toBeInstanceOf(Array);
     expect(illusts).toHaveLength(6);
   });
 
-  test("whose entries should have the properties of type ParsedIllustData.", async () => {
+  test("should return a array whose entries should have the properties of type ParsedIllustData.", async () => {
     const illusts = await fetchLatestIllusts(pixiv, 1);
     const illust = illusts![0];
 

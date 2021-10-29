@@ -8,6 +8,8 @@ test("Server should return string to GET '/'", async () => {
 });
 
 describe("When receiving GET '/image/*'", () => {
+  // uncover erros when setting up the axios request
+
   test("Server should return 400 to the path not starting with 'i.pximg.net'.", async () => {
     const INVALID_URL = "/image/invalid/path";
 

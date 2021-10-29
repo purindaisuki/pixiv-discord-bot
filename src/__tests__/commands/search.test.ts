@@ -92,23 +92,62 @@ test("search.execute(pixiv, interaction) should call pixiv and discord apis.", a
   expect(pixiv.searchPopularIllustsPreview).toBeCalledTimes(1);
 });
 
-describe("searchIllusts(pixiv, SEARCH_FLAG.POPULAR, '123', number) should return a array", () => {
-  test("with length 6 when the number argument is 6.", async () => {
-    const illusts = await searchIllusts(pixiv, SEARCH_FLAG.POPULAR, "123", 6);
+describe("searchIllusts", () => {
+  describe("called with subcommand 'popular'", () => {
+    test("should return null when erros happened in pixiv api call.", async () => {
+      pixiv.searchPopularIllustsPreview.mockRejectedValueOnce("");
 
-    expect(illusts).toBeInstanceOf(Array);
-    expect(illusts).toHaveLength(6);
+      const illusts = await searchIllusts(pixiv, SEARCH_FLAG.POPULAR, "123", 6);
+
+      expect(illusts).toBe(null);
+    });
+
+    test("should return a array with length 6 when the number argument is 6.", async () => {
+      const illusts = await searchIllusts(pixiv, SEARCH_FLAG.POPULAR, "123", 6);
+
+      expect(illusts).toBeInstanceOf(Array);
+      expect(illusts).toHaveLength(6);
+    });
+
+    test("should return a array whose entries should have the properties of type ParsedIllustData.", async () => {
+      const illusts = await searchIllusts(pixiv, SEARCH_FLAG.POPULAR, "123", 1);
+      const illust = illusts![0];
+
+      expect(illust).toHaveProperty("id");
+      expect(illust).toHaveProperty("caption");
+      expect(illust).toHaveProperty("user.id");
+      expect(illust).toHaveProperty("user.name");
+      expect(illust).toHaveProperty("user.image");
+      expect(illust).toHaveProperty("image");
+    });
   });
 
-  test("whose entries should have the properties of type ParsedIllustData.", async () => {
-    const illusts = await searchIllusts(pixiv, SEARCH_FLAG.POPULAR, "123", 1);
-    const illust = illusts![0];
+  describe("called with subcommand 'latest'", () => {
+    test("should return null when erros happened in pixiv api call.", async () => {
+      pixiv.searchLatestIllusts.mockRejectedValueOnce("");
 
-    expect(illust).toHaveProperty("id");
-    expect(illust).toHaveProperty("caption");
-    expect(illust).toHaveProperty("user.id");
-    expect(illust).toHaveProperty("user.name");
-    expect(illust).toHaveProperty("user.image");
-    expect(illust).toHaveProperty("image");
+      const illusts = await searchIllusts(pixiv, SEARCH_FLAG.LATEST, "123", 6);
+
+      expect(illusts).toBe(null);
+    });
+
+    test("should return a array with length 6 when the number argument is 6.", async () => {
+      const illusts = await searchIllusts(pixiv, SEARCH_FLAG.LATEST, "123", 6);
+
+      expect(illusts).toBeInstanceOf(Array);
+      expect(illusts).toHaveLength(6);
+    });
+
+    test("should return a array whose entries should have the properties of type ParsedIllustData.", async () => {
+      const illusts = await searchIllusts(pixiv, SEARCH_FLAG.LATEST, "123", 1);
+      const illust = illusts![0];
+
+      expect(illust).toHaveProperty("id");
+      expect(illust).toHaveProperty("caption");
+      expect(illust).toHaveProperty("user.id");
+      expect(illust).toHaveProperty("user.name");
+      expect(illust).toHaveProperty("user.image");
+      expect(illust).toHaveProperty("image");
+    });
   });
 });

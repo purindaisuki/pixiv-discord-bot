@@ -8,11 +8,15 @@ import {
 } from "../../commands/utils";
 import { mockIllust } from "../../__mocks__/mockIllustsResponse";
 
+const parsedIllusts = parseIllustsResponse([
+  mockIllust,
+] as SearchIllustsResponse["illusts"]);
+const IMAGE_URL =
+  "https://i.pximg.net/img-original/img/2018/07/24/20/49/16/69841518_p0.jpg";
+const USER_IMAGE_URL =
+  "https://i.pximg.net/user-profile/img/2020/06/02/14/06/38/18753751_cd0cf620c750f101ba73e0f0cb57726b_170.jpg";
+
 describe("getProxiedImageUrl(url)", () => {
-  const IMAGE_URL =
-    "https://i.pximg.net/img-original/img/2018/07/24/20/49/16/69841518_p0.jpg";
-  const USER_URL =
-    "https://i.pximg.net/user-profile/img/2020/06/02/14/06/38/18753751_cd0cf620c750f101ba73e0f0cb57726b_170.jpg";
   describe("at development stage", () => {
     let getProxiedImageUrl: (url: string) => string | null;
     let EMBED_ILLUST_BASE_URL: string;
@@ -36,7 +40,7 @@ describe("getProxiedImageUrl(url)", () => {
     });
 
     test("should return null when url is a user image url.", () => {
-      expect(getProxiedImageUrl(USER_URL)).toBe(null);
+      expect(getProxiedImageUrl(USER_IMAGE_URL)).toBe(null);
     });
 
     afterAll(() => {
@@ -63,14 +67,34 @@ describe("getProxiedImageUrl(url)", () => {
     });
 
     test("should return a proxied url when url is a user image url", () => {
-      expect(getProxiedImageUrl(USER_URL)).toBe(
-        `${process.env.PROXY}/image/${USER_URL.replace("https://", "")}`
+      expect(getProxiedImageUrl(USER_IMAGE_URL)).toBe(
+        `${process.env.PROXY}/image/${USER_IMAGE_URL.replace("https://", "")}`
       );
     });
 
     afterAll(() => {
       process.env.PROXY = undefined;
     });
+  });
+});
+
+describe("illustEmbed(illust)", () => {
+  test("should have author image when illust.user.image is truthy.", () => {
+    const illust = { ...parsedIllusts[0], user: { ...parsedIllusts[0].user } };
+    illust.user.image = USER_IMAGE_URL;
+
+    const embed = illustEmbed(illust);
+
+    expect(embed.author?.iconURL).toBe(USER_IMAGE_URL);
+  });
+
+  test("should have no author image illust.user.image is falsy", () => {
+    const illust = { ...parsedIllusts[0], user: { ...parsedIllusts[0].user } };
+    illust.user.image = null;
+
+    const embed = illustEmbed(illust);
+
+    expect(embed.author?.iconURL).toBe(undefined);
   });
 });
 
@@ -103,10 +127,6 @@ describe("handleIllustReply(interaction, illusts) should call interation.reply w
   });
 
   test("embeds when illusts is an valid array", async () => {
-    const parsedIllusts = parseIllustsResponse([
-      mockIllust,
-    ] as SearchIllustsResponse["illusts"]);
-
     await handleIllustReply(mockInteraction, parsedIllusts);
 
     expect(mockInteraction.reply).toBeCalledTimes(1);

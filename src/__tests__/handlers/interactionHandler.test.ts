@@ -13,20 +13,36 @@ describe("getInteractionHandler(pixiv)", () => {
   });
 
   describe("(interaction)", () => {
+    const getInteger = jest.fn();
     const mockInteraction = mocked({
       commandName: "nonExistCommand",
       isCommand: jest.fn(() => true) as Partial<
         CommandInteraction["isCommand"]
       >,
       reply: jest.fn() as CommandInteraction["reply"],
-      options: {
-        getInteger: jest.fn(),
-      } as Partial<CommandInteraction["options"]>,
+      options: { getInteger } as Partial<CommandInteraction["options"]>,
     } as CommandInteraction);
 
     beforeEach(() => {
       mockInteraction.isCommand.mockClear();
       mockInteraction.reply.mockClear();
+      getInteger.mockClear();
+    });
+
+    test("should reply error message when errors happened when executing a command.", async () => {
+      mockInteraction.commandName = "followed";
+      getInteger.mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      await getInteractionHandler(pixiv)({ ...mockInteraction });
+
+      expect(mockInteraction.reply).toBeCalledWith({
+        content: "Error",
+        ephemeral: true,
+      });
+
+      mockInteraction.commandName = "nonExistCommand";
     });
 
     test("should return undefined when interaction is not a command interaction.", async () => {
@@ -54,6 +70,8 @@ describe("getInteractionHandler(pixiv)", () => {
 
       expect(mockInteraction.isCommand).toBeCalledTimes(1);
       expect(mockInteraction.reply).toBeCalledTimes(1);
+
+      mockInteraction.commandName = "nonExistCommand";
     });
   });
 });

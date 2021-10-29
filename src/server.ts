@@ -1,6 +1,5 @@
 import express from "express";
 import axios, { AxiosError } from "axios";
-import config from "./config";
 
 const app = express();
 const webHeaders = {
@@ -15,7 +14,7 @@ app.get("/", (_, res) => {
 });
 
 // proxy image
-app.get("/image/*", (req, res) => {
+app.get("/image/*", async (req, res) => {
   const { path } = req;
   const url = path.slice(7);
 
@@ -24,23 +23,20 @@ app.get("/image/*", (req, res) => {
     return;
   }
 
-  axios("https://" + url, { headers: webHeaders, responseType: "arraybuffer" })
-    .then((pixivRes) => {
-      res.set(pixivRes.headers).status(200).send(pixivRes.data);
-    })
-    .catch((err) => {
-      if ((err as AxiosError).response) {
-        res.status(404).send((err as AxiosError).response!.data);
-      } else {
-        res.status(404).send((err as AxiosError).message);
-      }
+  try {
+    const pixivRes = await axios("https://" + url, {
+      headers: webHeaders,
+      responseType: "arraybuffer",
     });
+
+    res.set(pixivRes.headers).status(200).send(pixivRes.data);
+  } catch (err) {
+    if ((err as AxiosError).response) {
+      res.status(404).send((err as AxiosError).response!.data);
+    } else {
+      res.status(404).send((err as AxiosError).message);
+    }
+  }
 });
 
 export default app;
-
-export const listen = () => {
-  app.listen(config.port ?? "3000", () => {
-    console.log("Server is ready");
-  });
-};

@@ -100,23 +100,174 @@ test("ranking.execute(pixiv, interaction) should call pixiv and discord apis.", 
   expect(pixiv.fetchRankingIllusts).toBeCalledTimes(1);
 });
 
-describe("fetchRankingIllusts(pixiv, RankingMode.DAY, false, number) should return a array", () => {
-  test("with length 6 when the number argument is 6.", async () => {
-    const illusts = await fetchRankingIllusts(pixiv, RankingMode.DAY, false, 6);
+describe("fetchRankingIllusts", () => {
+  describe("called with subcommand 'day'", () => {
+    test("should return null when erros happened in pixiv api call.", async () => {
+      pixiv.fetchRankingIllusts.mockRejectedValueOnce("");
 
-    expect(illusts).toBeInstanceOf(Array);
-    expect(illusts).toHaveLength(6);
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.DAY,
+        false,
+        6
+      );
+
+      expect(illusts).toBe(null);
+    });
+
+    test("should return a array with length 6 when the number argument is 6.", async () => {
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.DAY,
+        false,
+        6
+      );
+
+      expect(illusts).toBeInstanceOf(Array);
+      expect(illusts).toHaveLength(6);
+    });
+
+    describe("should return a array whose entries should have the properties of type ParsedIllustData", () => {
+      test("without r18 tag.", async () => {
+        const illusts = await fetchRankingIllusts(
+          pixiv,
+          RankingMode.DAY,
+          false,
+          1
+        );
+        const illust = illusts![0];
+
+        expect(illust).toHaveProperty("id");
+        expect(illust).toHaveProperty("caption");
+        expect(illust).toHaveProperty("user.id");
+        expect(illust).toHaveProperty("user.name");
+        expect(illust).toHaveProperty("user.image");
+        expect(illust).toHaveProperty("image");
+      });
+    });
+
+    test("with r18 tag.", async () => {
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.DAY,
+        true,
+        1
+      );
+      const illust = illusts![0];
+
+      expect(illust).toHaveProperty("id");
+      expect(illust).toHaveProperty("caption");
+      expect(illust).toHaveProperty("user.id");
+      expect(illust).toHaveProperty("user.name");
+      expect(illust).toHaveProperty("user.image");
+      expect(illust).toHaveProperty("image");
+    });
   });
 
-  test("whose entries should have the properties of type ParsedIllustData.", async () => {
-    const illusts = await fetchRankingIllusts(pixiv, RankingMode.DAY, false, 1);
-    const illust = illusts![0];
+  describe("called with subcommand 'week'", () => {
+    test("should return null when erros happened in pixiv api call.", async () => {
+      pixiv.fetchRankingIllusts.mockRejectedValueOnce("");
 
-    expect(illust).toHaveProperty("id");
-    expect(illust).toHaveProperty("caption");
-    expect(illust).toHaveProperty("user.id");
-    expect(illust).toHaveProperty("user.name");
-    expect(illust).toHaveProperty("user.image");
-    expect(illust).toHaveProperty("image");
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.WEEK,
+        false,
+        6
+      );
+
+      expect(illusts).toBe(null);
+    });
+
+    test("should return a array with length 6 when the number argument is 6.", async () => {
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.WEEK,
+        false,
+        6
+      );
+
+      expect(illusts).toBeInstanceOf(Array);
+      expect(illusts).toHaveLength(6);
+    });
+
+    describe("should return a array whose entries should have the properties of type ParsedIllustData", () => {
+      test("without r18 tag.", async () => {
+        const illusts = await fetchRankingIllusts(
+          pixiv,
+          RankingMode.WEEK,
+          false,
+          1
+        );
+        const illust = illusts![0];
+
+        expect(illust).toHaveProperty("id");
+        expect(illust).toHaveProperty("caption");
+        expect(illust).toHaveProperty("user.id");
+        expect(illust).toHaveProperty("user.name");
+        expect(illust).toHaveProperty("user.image");
+        expect(illust).toHaveProperty("image");
+      });
+    });
+
+    test("with r18 tag.", async () => {
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.WEEK,
+        true,
+        1
+      );
+      const illust = illusts![0];
+
+      expect(illust).toHaveProperty("id");
+      expect(illust).toHaveProperty("caption");
+      expect(illust).toHaveProperty("user.id");
+      expect(illust).toHaveProperty("user.name");
+      expect(illust).toHaveProperty("user.image");
+      expect(illust).toHaveProperty("image");
+    });
+  });
+
+  describe("called with subcommand 'month'", () => {
+    test("should return null when erros happened in pixiv api call.", async () => {
+      pixiv.fetchRankingIllusts.mockRejectedValueOnce("");
+
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.MONTH,
+        false,
+        6
+      );
+
+      expect(illusts).toBe(null);
+    });
+
+    test("should return a array with length 6 when the number argument is 6.", async () => {
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.MONTH,
+        false,
+        6
+      );
+
+      expect(illusts).toBeInstanceOf(Array);
+      expect(illusts).toHaveLength(6);
+    });
+
+    test("should return a array whose entries should have the properties of type ParsedIllustData.", async () => {
+      const illusts = await fetchRankingIllusts(
+        pixiv,
+        RankingMode.MONTH,
+        false,
+        1
+      );
+      const illust = illusts![0];
+
+      expect(illust).toHaveProperty("id");
+      expect(illust).toHaveProperty("caption");
+      expect(illust).toHaveProperty("user.id");
+      expect(illust).toHaveProperty("user.name");
+      expect(illust).toHaveProperty("user.image");
+      expect(illust).toHaveProperty("image");
+    });
   });
 });

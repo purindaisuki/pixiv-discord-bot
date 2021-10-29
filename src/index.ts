@@ -1,6 +1,6 @@
 import { Client, Intents } from "discord.js";
 import PixivAPI from "./pixiv";
-import { listen } from "./server";
+import server from "./server";
 import {
   getReadyHandler,
   getInteractionHandler,
@@ -27,4 +27,7 @@ bot.on("interactionCreate", getInteractionHandler(pixiv));
 bot.on("message", messageHandler);
 
 bot.login(config.botToken);
-listen();
+
+server.listen(config.port ?? "3000", () => {
+  console.log("Server is ready");
+});

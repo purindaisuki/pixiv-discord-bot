@@ -1,5 +1,18 @@
 import { GuildManager } from "discord.js";
 
+const get = jest.fn(() => ({ commands: { create } }));
+const create = jest.fn();
+const mockGuild = {
+  cache: {
+    get: get as Partial<GuildManager["cache"]["get"]>,
+  } as Partial<GuildManager["cache"]>,
+} as GuildManager;
+
+beforeEach(() => {
+  get.mockClear();
+  create.mockClear();
+});
+
 describe("getReadyHandler(guilds)", () => {
   let getReadyHandler = require("../../handlers").getReadyHandler;
 
@@ -8,12 +21,6 @@ describe("getReadyHandler(guilds)", () => {
   });
 
   test("() should not call guilds.cache.get at non-development stage", () => {
-    const mockGuild = {
-      cache: {
-        get: jest.fn() as Partial<GuildManager["cache"]["get"]>,
-      } as Partial<GuildManager["cache"]>,
-    } as GuildManager;
-
     getReadyHandler(mockGuild)();
 
     expect(mockGuild.cache.get).not.toHaveBeenCalled();
@@ -23,15 +30,6 @@ describe("getReadyHandler(guilds)", () => {
     jest.resetModules();
     process.env.NODE_ENV = "development";
     getReadyHandler = require("../../handlers").getReadyHandler;
-
-    const create = jest.fn();
-    const mockGuild = {
-      cache: {
-        get: jest.fn(() => ({ commands: { create } })) as Partial<
-          GuildManager["cache"]["get"]
-        >,
-      } as Partial<GuildManager["cache"]>,
-    } as GuildManager;
 
     getReadyHandler(mockGuild)();
 

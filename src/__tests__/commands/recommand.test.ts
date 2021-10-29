@@ -49,15 +49,23 @@ test("recommend.execute(pixiv, interaction) should call pixiv and discord apis."
   expect(pixiv.fetchRecommendedIllusts).toBeCalledTimes(1);
 });
 
-describe("fetchRecommendedIllusts(pixiv, number) should return a array", () => {
-  test("with length 6 when the number argument is 6.", async () => {
+describe("fetchRecommendedIllusts(pixiv, number)", () => {
+  test("should return null when erros happened in pixiv api call.", async () => {
+    pixiv.fetchRecommendedIllusts.mockRejectedValueOnce("");
+
+    const illusts = await fetchRecommendedIllusts(pixiv, 1);
+
+    expect(illusts).toBe(null);
+  });
+
+  test("should return a array with length 6 when the number argument is 6.", async () => {
     const illusts = await fetchRecommendedIllusts(pixiv, 6);
 
     expect(illusts).toBeInstanceOf(Array);
     expect(illusts).toHaveLength(6);
   });
 
-  test("whose entries should have the properties of type ParsedIllustData.", async () => {
+  test("should return a array with length 6 when the number argument is 6.", async () => {
     const illusts = await fetchRecommendedIllusts(pixiv, 1);
     const illust = illusts![0];
 
