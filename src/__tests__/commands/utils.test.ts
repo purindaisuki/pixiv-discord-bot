@@ -8,13 +8,13 @@ import {
 } from "../../commands/utils";
 import { mockIllust } from "../../__mocks__/mockIllustsResponse";
 
-describe("getProxiedImageURL(url)", () => {
+describe("getProxiedImageUrl(url)", () => {
   const IMAGE_URL =
     "https://i.pximg.net/img-original/img/2018/07/24/20/49/16/69841518_p0.jpg";
   const USER_URL =
     "https://i.pximg.net/user-profile/img/2020/06/02/14/06/38/18753751_cd0cf620c750f101ba73e0f0cb57726b_170.jpg";
   describe("at development stage", () => {
-    let getProxiedImageURL: (url: string) => string | null;
+    let getProxiedImageUrl: (url: string) => string | null;
     let EMBED_ILLUST_BASE_URL: string;
 
     beforeEach(() => {
@@ -22,21 +22,21 @@ describe("getProxiedImageURL(url)", () => {
       process.env.NODE_ENV = "development";
 
       const {
-        getProxiedImageURL: fn,
+        getProxiedImageUrl: fn,
         EMBED_ILLUST_BASE_URL: URL,
       } = require("../../commands/utils");
-      getProxiedImageURL = fn;
+      getProxiedImageUrl = fn;
       EMBED_ILLUST_BASE_URL = URL;
     });
 
     test("should return an embedded image url when url is an image url.", () => {
-      expect(getProxiedImageURL(IMAGE_URL)).toBe(
+      expect(getProxiedImageUrl(IMAGE_URL)).toBe(
         EMBED_ILLUST_BASE_URL + IMAGE_URL.split("/").slice(-1)[0].slice(0, 8)
       );
     });
 
     test("should return null when url is a user image url.", () => {
-      expect(getProxiedImageURL(USER_URL)).toBe(null);
+      expect(getProxiedImageUrl(USER_URL)).toBe(null);
     });
 
     afterAll(() => {
@@ -46,24 +46,24 @@ describe("getProxiedImageURL(url)", () => {
 
   describe("at non-development stage and with a proxy", () => {
     const TEST_PROXY = "https://test.proxy";
-    let getProxiedImageURL: (url: string) => string | null;
+    let getProxiedImageUrl: (url: string) => string | null;
 
     beforeEach(() => {
       jest.resetModules();
       process.env.PROXY = TEST_PROXY;
 
-      const { getProxiedImageURL: fn } = require("../../commands/utils");
-      getProxiedImageURL = fn;
+      const { getProxiedImageUrl: fn } = require("../../commands/utils");
+      getProxiedImageUrl = fn;
     });
 
     test("should return a proxied url when url is an image url", () => {
-      expect(getProxiedImageURL(IMAGE_URL)).toBe(
+      expect(getProxiedImageUrl(IMAGE_URL)).toBe(
         `${process.env.PROXY}/image/${IMAGE_URL.replace("https://", "")}`
       );
     });
 
     test("should return a proxied url when url is a user image url", () => {
-      expect(getProxiedImageURL(USER_URL)).toBe(
+      expect(getProxiedImageUrl(USER_URL)).toBe(
         `${process.env.PROXY}/image/${USER_URL.replace("https://", "")}`
       );
     });

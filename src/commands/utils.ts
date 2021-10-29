@@ -11,7 +11,7 @@ export const DISCORD_EMBED_MAXIMUM = 10; // data.embeds: Must be 10 or fewer in 
 export const EMBED_ILLUST_BASE_URL =
   "https://embed.pixiv.net/decorate.php?illust_id=";
 
-export const getProxiedImageURL = (url: string) =>
+export const getProxiedImageUrl = (url: string) =>
   config.nodeEnv === "development" || !config.proxy
     ? url.includes("user")
       ? null
@@ -38,9 +38,9 @@ export const parseIllustsResponse = (
       user: {
         id: userId,
         name: userName,
-        image: getProxiedImageURL(i.user.profile_image_urls.medium),
+        image: getProxiedImageUrl(i.user.profile_image_urls.medium),
       },
-      image: getProxiedImageURL(
+      image: getProxiedImageUrl(
         i.meta_single_page.original_image_url ??
           i.meta_pages[0].image_urls.original
       )!,
