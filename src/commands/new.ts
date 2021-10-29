@@ -8,7 +8,7 @@ import {
   parseIllustsResponse,
 } from "./utils";
 
-const fetchLatestIllusts = async (pixiv: PixivAPI, number: number) => {
+export const fetchLatestIllusts = async (pixiv: PixivAPI, number: number) => {
   let illusts;
 
   try {
