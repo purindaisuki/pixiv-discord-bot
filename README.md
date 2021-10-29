@@ -10,7 +10,7 @@ Pixiv-Discord-Bot allows you to get illustrations from [Pixiv](https://www.pixiv
 ## Requirement
 
 - Node.js >= 16.6.0
-- A self-hosted server
+- A server for hosting
 - A Discord developer account
 - A Pixiv account
 
@@ -20,6 +20,8 @@ Create a `.env` file and fill in the variables shown below.
 
 ```
 NODE_ENV=development
+
+PROXY=https://your.server.com
 PORT=1234
 
 # Your discord bot token
@@ -34,7 +36,7 @@ PIXIV_REFRESH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxx
 
 For Pixiv refresh token, you can use [this script](https://gist.github.com/ZipFile/c9ebedb224406f4f11845ab700124362) written by [ZipFile](https://github.com/ZipFile) to retrieve it.
 
-In the `config.ts` file, you can edit the bot's command prefix.
+In the `config.ts` file, you can edit the prefix of text commands.
 
 ## Commands
 
@@ -61,7 +63,10 @@ Commands are shown below:
 
 ### Hosting
 
-`.replit` and `replit.nix` are config files for hosting on Repl.it. [![Run on Repl.it](https://replit.com/badge/github/@purindaisuki/pixiv-discord-bot)](https://replit.com/@purindaisuki/pixiv-discord-bot)
+`.replit` and `replit.nix` are config files for hosting on Repl.it.
+
+[![Run on Repl.it](https://replit.com/badge/github/@purindaisuki/pixiv-discord-bot)](https://replit.com/@purindaisuki/pixiv-discord-bot)
+
 You can use other services to host your bot.
 
 ## License
