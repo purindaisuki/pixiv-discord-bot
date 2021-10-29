@@ -1,5 +1,8 @@
 # Pixiv-Discord-Bot
 
+[![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/purindaisuki/7eb8b8a6e8cc0429e6c1401637177511/raw/pixiv-discord-bot_coverage.json)](https://github.com/purindaisuki/pixiv-discord-bot/tree/master/src/__tests__)
+[![License Badge](https://img.shields.io/github/license/purindaisuki/pixiv-discord-bot?style=flat)](https://github.com/purindaisuki/pixiv-discord-bot/blob/master/LICENSE)
+
 Pixiv-Discord-Bot allows you to get illustrations from [Pixiv](https://www.pixiv.net/) on Discord servers.
 
 ![Result](images/result.jpg)
