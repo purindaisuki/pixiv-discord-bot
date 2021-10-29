@@ -41,7 +41,7 @@ type Illust = {
     title: string;
   } | null;
   meta_single_page: {
-    original_image_url: string;
+    original_image_url?: string;
   };
   meta_pages: {
     image_urls: {
@@ -56,6 +56,7 @@ type Illust = {
   is_bookmarked: boolean;
   visible: boolean;
   is_muted: boolean;
+  total_comments?: number;
 };
 
 export type ParsedIllustData = {
@@ -65,19 +66,18 @@ export type ParsedIllustData = {
   user: {
     id: number;
     name: string;
-    account: string;
     image: string | null;
-    is_followed: boolean;
   };
   image: string;
 };
 
 export type SearchIllustsResponse = {
   illusts: Illust[];
+  next_url?: string;
   search_span_limit: number;
 };
 
-export type IullstBookmarkDetailResponse = {
+export type IllustBookmarkDetailResponse = {
   bookmark_detail: {
     is_bookmarked: boolean;
     tags: {

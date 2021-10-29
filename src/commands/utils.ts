@@ -5,16 +5,18 @@ import type {
   ParsedIllustData,
   SearchIllustsResponse,
 } from "../types/response";
+import config from "../config";
 
 export const DISCORD_EMBED_MAXIMUM = 10; // data.embeds: Must be 10 or fewer in length.
-const EMBED_ILLUST_BASE_URL = "https://embed.pixiv.net/decorate.php?illust_id=";
+export const EMBED_ILLUST_BASE_URL =
+  "https://embed.pixiv.net/decorate.php?illust_id=";
 
-const getProxiedImageURL = (url: string) =>
-  process.env.NODE_ENV === "development" || !process.env.PROXY
+export const getProxiedImageUrl = (url: string) =>
+  config.nodeEnv === "development" || !config.proxy
     ? url.includes("user")
       ? null
       : EMBED_ILLUST_BASE_URL + url.split("/").slice(-1)[0].slice(0, 8)
-    : `${process.env.PROXY}/image/${url.replace("https://", "")}`;
+    : `${config.proxy}/image/${url.replace("https://", "")}`;
 
 const parseDescriptionHtml = (string: string) =>
   he
@@ -26,20 +28,26 @@ const parseDescriptionHtml = (string: string) =>
 export const parseIllustsResponse = (
   illusts: SearchIllustsResponse["illusts"]
 ): ParsedIllustData[] =>
-  illusts.map((i) => ({
-    id: i.id,
-    caption: parseDescriptionHtml(i.caption),
-    title: i.title,
-    user: {
-      ...i.user,
-      image: getProxiedImageURL(i.user.profile_image_urls.medium),
-    },
-    image: getProxiedImageURL(
-      i.meta_single_page.original_image_url ??
-        i.meta_pages[0].image_urls.original
-    )!,
-  }));
-const illustEmbed = (illust: ParsedIllustData) => {
+  illusts.map((i) => {
+    const { name: userName, id: userId } = i.user;
+
+    return {
+      id: i.id,
+      caption: parseDescriptionHtml(i.caption),
+      title: i.title,
+      user: {
+        id: userId,
+        name: userName,
+        image: getProxiedImageUrl(i.user.profile_image_urls.medium),
+      },
+      image: getProxiedImageUrl(
+        i.meta_single_page.original_image_url ??
+          i.meta_pages[0].image_urls.original
+      )!,
+    };
+  });
+
+export const illustEmbed = (illust: ParsedIllustData) => {
   const embed = new MessageEmbed()
     .setColor("#0097FA")
     .setTitle(illust.title)

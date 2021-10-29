@@ -1,3 +1,8 @@
+export enum PlatformFilter {
+  ANDORID = "for_android",
+  IOS = "for_ios",
+}
+
 export enum ContentType {
   ILLUST = "illust",
   MANGA = "mange",

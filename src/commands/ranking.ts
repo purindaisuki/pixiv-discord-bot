@@ -17,7 +17,7 @@ type ExposedRankingMode =
   | RankingMode.WEEK
   | RankingMode.MONTH;
 
-const fetchRankingIllusts = async (
+export const fetchRankingIllusts = async (
   pixiv: PixivAPI,
   flag: ExposedRankingMode,
   r18: boolean | null,
@@ -42,7 +42,7 @@ const fetchRankingIllusts = async (
     }
 
     illusts = parseIllustsResponse(
-      (await pixiv.fetchRankingIllust(mode)).illusts.slice(0, number)
+      (await pixiv.fetchRankingIllusts(mode)).illusts.slice(0, number)
     );
   } catch (err) {
     console.log(err);
