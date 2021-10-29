@@ -3,9 +3,7 @@ import { Routes } from "discord-api-types/v9";
 import commandModules from "../src/commands";
 import config from "../src/config";
 
-const commands = Object.values(commandModules).map((command) =>
-  command.data.toJSON()
-);
+const commands = commandModules.map((command) => command.data.toJSON());
 const rest = new REST({ version: "9" }).setToken(config.botToken!);
 
 (async () => {

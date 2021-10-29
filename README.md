@@ -27,7 +27,7 @@ PORT=1234
 # Your discord bot token
 BOT_TOKEN=xxxxxxxxxxxxxxxxxxxxxxx
 # Your application client ID
-CLIENTID=xxxxxxxxxxxxxxxxxxxxxxx
+CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxx
 # Your server ID for development
 GUILD_ID=xxxxxxxxxxxxxxxxxxxxxxx
 
