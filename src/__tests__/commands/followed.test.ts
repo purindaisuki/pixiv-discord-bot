@@ -1,8 +1,11 @@
-import { CommandInteraction } from "discord.js";
 import { mocked } from "ts-jest/utils";
 import { followed, fetchFollowedIllusts } from "../../commands/followed";
 import PixivAPI from "../../pixiv";
-import mockIllustsResponse from "../../__mocks__/mockIllustsResponse";
+import {
+  mockIllustsResponse,
+  mockInteraction,
+  mockInteractionOptions,
+} from "../../__mocks__";
 
 jest.mock("../../pixiv", () =>
   jest.fn().mockImplementation(() => ({
@@ -31,13 +34,9 @@ test("followed.data should have the properties of the followed slashcommand.", (
 });
 
 test("followed.execute(pixiv, interaction) should call pixiv and discord apis.", async () => {
+  mockInteractionOptions.getInteger.mockClear();
+
   const { execute } = followed;
-  const mockInteraction = {
-    reply: jest.fn() as Partial<CommandInteraction["reply"]>,
-    options: {
-      getInteger: jest.fn(),
-    } as Partial<CommandInteraction["options"]>,
-  } as CommandInteraction;
 
   await execute(pixiv, mockInteraction);
 

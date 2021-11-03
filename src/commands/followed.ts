@@ -17,9 +17,9 @@ export const fetchFollowedIllusts = async (pixiv: PixivAPI, number: number) => {
     );
   } catch (err) {
     console.log(err);
+  } finally {
+    return illusts ?? null;
   }
-
-  return illusts ?? null;
 };
 
 export const followed = {
@@ -32,8 +32,7 @@ export const followed = {
       interaction.options.getInteger("number") ?? 1,
       DISCORD_EMBED_MAXIMUM
     );
-    const illusts = await fetchFollowedIllusts(pixiv, number);
 
-    await handleIllustReply(interaction, illusts);
+    await handleIllustReply(interaction, fetchFollowedIllusts(pixiv, number));
   },
 };

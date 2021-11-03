@@ -20,9 +20,9 @@ export const fetchRecommendedIllusts = async (
     );
   } catch (err) {
     console.log(err);
+  } finally {
+    return illusts ?? null;
   }
-
-  return illusts ?? null;
 };
 
 export const recommend = {
@@ -35,8 +35,10 @@ export const recommend = {
       interaction.options.getInteger("number") ?? 1,
       DISCORD_EMBED_MAXIMUM
     );
-    const illusts = await fetchRecommendedIllusts(pixiv, number);
 
-    await handleIllustReply(interaction, illusts);
+    await handleIllustReply(
+      interaction,
+      fetchRecommendedIllusts(pixiv, number)
+    );
   },
 };

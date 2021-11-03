@@ -1,12 +1,10 @@
-import { CommandInteraction } from "discord.js";
-import { mocked } from "ts-jest/utils";
 import { SearchIllustsResponse } from "../../types/response";
 import {
   handleIllustReply,
   parseIllustsResponse,
   illustEmbed,
 } from "../../commands/utils";
-import { mockIllust } from "../../__mocks__/mockIllustsResponse";
+import { mockIllust, mockInteraction } from "../../__mocks__";
 
 const parsedIllusts = parseIllustsResponse([
   mockIllust,
@@ -98,39 +96,36 @@ describe("illustEmbed(illust)", () => {
   });
 });
 
-describe("handleIllustReply(interaction, illusts) should call interation.reply with", () => {
-  const mockInteraction = mocked({
-    reply: jest.fn() as Partial<CommandInteraction["reply"]>,
-  } as CommandInteraction);
-
+describe("handleIllustReply(interaction, promise)", () => {
   beforeEach(() => {
-    mockInteraction.reply.mockClear();
+    mockInteraction.deferReply.mockClear();
+    mockInteraction.editReply.mockClear();
   });
 
-  test("'Error' when illusts is null.", async () => {
-    await handleIllustReply(mockInteraction, null);
+  test("should call interaction.deferReply and throw Error when resolved illusts is null.", async () => {
+    await expect(
+      handleIllustReply(mockInteraction, Promise.resolve(null))
+    ).rejects.toThrow("Errors happened when fetching data");
 
-    expect(mockInteraction.reply).toBeCalledTimes(1);
-    expect(mockInteraction.reply).toBeCalledWith({
-      content: "Error",
-      ephemeral: true,
-    });
+    expect(mockInteraction.deferReply).toBeCalledTimes(1);
   });
 
-  test("'Not found' when illusts has no entries.", async () => {
-    await handleIllustReply(mockInteraction, []);
+  test("should call interaction.deferReply and interation.editReply with 'Not found' when resolved illusts has no entries.", async () => {
+    await handleIllustReply(mockInteraction, Promise.resolve([]));
 
-    expect(mockInteraction.reply).toBeCalledTimes(1);
-    expect(mockInteraction.reply).toBeCalledWith({
+    expect(mockInteraction.deferReply).toBeCalledTimes(1);
+    expect(mockInteraction.editReply).toBeCalledTimes(1);
+    expect(mockInteraction.editReply).toBeCalledWith({
       content: "Not found",
     });
   });
 
-  test("embeds when illusts is an valid array", async () => {
-    await handleIllustReply(mockInteraction, parsedIllusts);
+  test("should call interaction.deferReply and interation.editReply with embeds when resolved illusts is an valid array", async () => {
+    await handleIllustReply(mockInteraction, Promise.resolve(parsedIllusts));
 
-    expect(mockInteraction.reply).toBeCalledTimes(1);
-    expect(mockInteraction.reply).toBeCalledWith({
+    expect(mockInteraction.deferReply).toBeCalledTimes(1);
+    expect(mockInteraction.editReply).toBeCalledTimes(1);
+    expect(mockInteraction.editReply).toBeCalledWith({
       embeds: parsedIllusts.map((illust) => illustEmbed(illust)),
     });
   });

@@ -1,4 +1,3 @@
-import { CommandInteraction } from "discord.js";
 import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
@@ -7,7 +6,11 @@ import { mocked } from "ts-jest/utils";
 import { RankingMode } from "../../types/enums";
 import { ranking, fetchRankingIllusts } from "../../commands/ranking";
 import PixivAPI from "../../pixiv";
-import mockIllustsResponse from "../../__mocks__/mockIllustsResponse";
+import {
+  mockIllustsResponse,
+  mockInteraction,
+  mockInteractionOptions,
+} from "../../__mocks__";
 
 jest.mock("../../pixiv", () =>
   jest.fn().mockImplementation(() => ({
@@ -78,15 +81,11 @@ test("ranking.data should have the properties of the rank slashcommand.", () => 
 });
 
 test("ranking.execute(pixiv, interaction) should call pixiv and discord apis.", async () => {
+  mockInteractionOptions.getInteger.mockClear();
+  mockInteractionOptions.getSubcommand.mockClear();
+  mockInteractionOptions.getBoolean.mockClear();
+
   const { execute } = ranking;
-  const mockInteraction = {
-    reply: jest.fn() as Partial<CommandInteraction["reply"]>,
-    options: {
-      getBoolean: jest.fn(),
-      getInteger: jest.fn(),
-      getSubcommand: jest.fn(),
-    } as Partial<CommandInteraction["options"]>,
-  } as CommandInteraction;
 
   await execute(pixiv, mockInteraction);
 
