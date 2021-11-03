@@ -14,6 +14,6 @@ export const getInteractionHandler =
       await command.execute(pixiv, interaction);
     } catch (error) {
       console.error(error);
-      await interaction.reply({ content: "Error", ephemeral: true });
+      await interaction.editReply({ content: "Error" });
     }
   };

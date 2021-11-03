@@ -29,9 +29,7 @@ export const searchIllusts = async (
     switch (flag) {
       case SEARCH_FLAG.LATEST:
         illusts = parseIllustsResponse(
-          (
-            await pixiv.searchLatestIllusts(query, Sort.DATE_DESC)
-          ).illusts.slice(0, number)
+          (await pixiv.searchLatestIllusts(query)).illusts.slice(0, number)
         );
         break;
       case SEARCH_FLAG.POPULAR:
@@ -41,13 +39,15 @@ export const searchIllusts = async (
             number
           )
         );
+        console.log(illusts);
+
         break;
     }
   } catch (err) {
     console.log(err);
+  } finally {
+    return illusts ?? null;
   }
-
-  return illusts ?? null;
 };
 
 const query = (option: SlashCommandStringOption) =>
@@ -77,13 +77,15 @@ export const search = {
       options.getInteger("number") ?? 1,
       DISCORD_EMBED_MAXIMUM
     );
-    const illusts = await searchIllusts(
-      pixiv,
-      options.getSubcommand() as SEARCH_FLAG,
-      options.getString("query", true),
-      number
-    );
 
-    await handleIllustReply(interaction, illusts);
+    await handleIllustReply(
+      interaction,
+      searchIllusts(
+        pixiv,
+        options.getSubcommand() as SEARCH_FLAG,
+        options.getString("query", true),
+        number
+      )
+    );
   },
 };

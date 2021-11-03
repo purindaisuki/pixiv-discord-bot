@@ -17,9 +17,9 @@ export const fetchLatestIllusts = async (pixiv: PixivAPI, number: number) => {
     );
   } catch (err) {
     console.log(err);
+  } finally {
+    return illusts ?? null;
   }
-
-  return illusts ?? null;
 };
 
 export const latest = {
@@ -32,8 +32,7 @@ export const latest = {
       interaction.options.getInteger("number") ?? 1,
       DISCORD_EMBED_MAXIMUM
     );
-    const illusts = await fetchLatestIllusts(pixiv, number);
 
-    await handleIllustReply(interaction, illusts);
+    await handleIllustReply(interaction, fetchLatestIllusts(pixiv, number));
   },
 };

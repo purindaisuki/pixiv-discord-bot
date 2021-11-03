@@ -80,20 +80,22 @@ export const numberOption = (option: SlashCommandIntegerOption) =>
 
 export const handleIllustReply = async (
   interaction: CommandInteraction,
-  illusts: ParsedIllustData[] | null
+  fetchPromise: Promise<ParsedIllustData[] | null>
 ) => {
+  // extend the response time limit from 3 s to 15 min
+  await interaction.deferReply();
+
+  const illusts = await fetchPromise;
+
   if (!illusts) {
-    await interaction.reply({
-      content: "Error",
-      ephemeral: true,
-    });
+    throw new Error("Errors happened when fetching data");
   } else if (illusts.length === 0) {
-    await interaction.reply({
+    await interaction.editReply({
       content: "Not found",
     });
   } else {
     const embeds = illusts.map((illust) => illustEmbed(illust));
 
-    await interaction.reply({ embeds });
+    await interaction.editReply({ embeds });
   }
 };

@@ -46,9 +46,9 @@ export const fetchRankingIllusts = async (
     );
   } catch (err) {
     console.log(err);
+  } finally {
+    return illusts ?? null;
   }
-
-  return illusts ?? null;
 };
 
 const r18Filter = (option: SlashCommandBooleanOption) =>
@@ -87,13 +87,15 @@ export const ranking = {
       options.getInteger("number") ?? 1,
       DISCORD_EMBED_MAXIMUM
     );
-    const illusts = await fetchRankingIllusts(
-      pixiv,
-      options.getSubcommand() as ExposedRankingMode,
-      options.getBoolean("r18"),
-      number
-    );
 
-    await handleIllustReply(interaction, illusts);
+    await handleIllustReply(
+      interaction,
+      fetchRankingIllusts(
+        pixiv,
+        options.getSubcommand() as ExposedRankingMode,
+        options.getBoolean("r18"),
+        number
+      )
+    );
   },
 };

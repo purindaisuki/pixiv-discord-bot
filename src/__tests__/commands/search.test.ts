@@ -1,4 +1,3 @@
-import { CommandInteraction } from "discord.js";
 import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
@@ -6,7 +5,11 @@ import {
 import { mocked } from "ts-jest/utils";
 import { search, searchIllusts, SEARCH_FLAG } from "../../commands/search";
 import PixivAPI from "../../pixiv";
-import mockIllustsResponse from "../../__mocks__/mockIllustsResponse";
+import {
+  mockIllustsResponse,
+  mockInteraction,
+  mockInteractionOptions,
+} from "../../__mocks__";
 
 jest.mock("../../pixiv", () =>
   jest.fn().mockImplementation(() => ({
@@ -70,15 +73,12 @@ test("search.data should have the properties of the search slashcommand.", () =>
 });
 
 test("search.execute(pixiv, interaction) should call pixiv and discord apis.", async () => {
+  mockInteractionOptions.getInteger.mockClear();
+  mockInteractionOptions.getSubcommand.mockClear();
+  mockInteractionOptions.getSubcommand.mockReturnValueOnce(SEARCH_FLAG.POPULAR);
+  mockInteractionOptions.getString.mockClear();
+
   const { execute } = search;
-  const mockInteraction = {
-    reply: jest.fn() as Partial<CommandInteraction["reply"]>,
-    options: {
-      getInteger: jest.fn(),
-      getString: jest.fn(),
-      getSubcommand: jest.fn(() => SEARCH_FLAG.POPULAR),
-    } as Partial<CommandInteraction["options"]>,
-  } as CommandInteraction;
 
   await execute(pixiv, mockInteraction);
 

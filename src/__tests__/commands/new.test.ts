@@ -1,8 +1,11 @@
-import { CommandInteraction } from "discord.js";
 import { mocked } from "ts-jest/utils";
 import { latest, fetchLatestIllusts } from "../../commands/new";
 import PixivAPI from "../../pixiv";
-import mockIllustsResponse from "../../__mocks__/mockIllustsResponse";
+import {
+  mockIllustsResponse,
+  mockInteraction,
+  mockInteractionOptions,
+} from "../../__mocks__";
 
 jest.mock("../../pixiv", () =>
   jest.fn().mockImplementation(() => ({
@@ -31,13 +34,9 @@ test("latest.data should have the properties of the new slashcommand.", () => {
 });
 
 test("latest.execute(pixiv, interaction) should call pixiv and discord apis.", async () => {
+  mockInteractionOptions.getInteger.mockClear();
+
   const { execute } = latest;
-  const mockInteraction = {
-    reply: jest.fn() as Partial<CommandInteraction["reply"]>,
-    options: {
-      getInteger: jest.fn(),
-    } as Partial<CommandInteraction["options"]>,
-  } as CommandInteraction;
 
   await execute(pixiv, mockInteraction);
 
